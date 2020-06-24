@@ -50,4 +50,9 @@ public class ObjectPooler : MonoBehaviour
         return null;
     }
     
+    public class PoolingObjectTags
+    {
+        public const string FloorCubeTag = "FloorCubeTag";
+        public const string PlayerCubeTag = "PlayerCubeTag";
+    }
 }
