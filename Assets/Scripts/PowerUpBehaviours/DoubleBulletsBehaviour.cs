@@ -1,11 +1,12 @@
 using Complete;
+using PowerUp;
 
 namespace PowerUps
 {
-    public class DoubleFireRateBulletsBehaviour : PowerUpBehaviour
+    public class DoubleBulletsBehaviour : PowerUpBehaviour
     {
         private TankShooting _tankShooting;
-
+        
         private void Start()
         {
             _tankShooting = tank.GetComponent<TankShooting>();
@@ -13,12 +14,12 @@ namespace PowerUps
 
         public override void Activate()
         {
-            _tankShooting.firingRate = 1f;
+            _tankShooting.doubleFireIsActivated = true;
         }
 
         public override void Deactivate()
         {
-            _tankShooting.firingRate = 2f;
+            _tankShooting.doubleFireIsActivated = false;
         }
     }
 }

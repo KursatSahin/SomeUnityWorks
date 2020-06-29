@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Common;
+using PowerUp;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,26 +17,37 @@ namespace Complete
         public AudioClip m_FireClip;              // Audio that plays when each shot is fired.
         public float bulletSpeed = 15f;        // The force given to the shell if the fire button is not held.
         public float firingRate = 2f;       // How long the shell can charge for before it is fired at max force.
-        public bool doubleFireIsActivated = true;
+        public bool doubleFireIsActivated = false;
         private Coroutine _fireCoroutine = null;
 
-        private List<PowerUp> _ownedPowerUps;
+        private List<PowerUp.PowerUp> _ownedPowerUps;
         
         private string fireActivateButton = "Jump";        // The input axis that is used for launching shells.
         private void Awake ()
         {
             EventManager.GetInstance().AddHandler(Events.PowerUpInUseUpdated, OnPowerUpInUseUpdated);
+            //gameObject.SetActive(false);
         }
 
         private void Start()
         {
-            ActivateFire();
+            //gameObject.SetActive(true);
+        }
+
+        private void OnEnable()
+        {
+            //ActivateFire();
         }
 
         private void OnPowerUpInUseUpdated(object data)
         {
+            if (!isActiveAndEnabled)
+            {
+                return;
+            }
+            
             // Get updated list
-            _ownedPowerUps = data as List<PowerUp>;
+            _ownedPowerUps = data as List<PowerUp.PowerUp>;
             
             // First stop fire for prevent causing sync problems
             DeactivateFire();
@@ -56,12 +69,10 @@ namespace Complete
             // Then reactivate fire method and powerups
             foreach (var powerUp in _ownedPowerUps)
             {
-                if (powerUp.type == PowerUpType.CloneTank)
+                if (!powerUp.isActivated)
                 {
-                    continue;
+                    powerUp.ActivatePowerUp();
                 }
-
-                powerUp.ActivatePowerUp();
             }
             
             ActivateFire();
