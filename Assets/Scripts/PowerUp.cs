@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Events;
 
 [Serializable]
 public class PowerUp
 {
     public PowerUpType type;
-    public string Label
+    public string Name
     {
         get
         {
             return Regex.Replace(type.ToString(), "(?<=[a-z])([A-Z])", " $1", RegexOptions.Compiled);
         }
     }
-    public int boostDuration;
+    public int duration;
+    public bool isActivated = false;
 
+    public UnityEvent activateAction;
+    public UnityEvent deactivateAction;
     public override bool Equals(object obj)
     {
         if (obj is PowerUp)
@@ -32,14 +36,24 @@ public class PowerUp
         }
         return base.Equals(obj);
     }
+
+    public void ActivatePowerUp()
+    {
+        activateAction.Invoke();
+    }
+
+    public void DeactivatePowerUp()
+    {
+        deactivateAction.Invoke();
+    }
 }
 
 [Serializable]
 public enum PowerUpType
 {
     SideFire,
-    DoubleFire,
-    DoubleFiringRate,
-    SpeedBullets,
-    Clone
+    DoubleBullets,
+    DoubleFireRateBullets,
+    DoubleSpeedBullets,
+    CloneTank
 }

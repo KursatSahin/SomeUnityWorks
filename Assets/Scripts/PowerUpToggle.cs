@@ -52,7 +52,7 @@ public class PowerUpToggle : MonoBehaviour
         
         // Set texts for this toggle 
         powerupStatusText.text = ToggleIsNotSelectedMessage;
-        powerupLabelText.text = powerUp.Label;
+        powerupLabelText.text = powerUp.Name;
     }
 
     /// <summary>

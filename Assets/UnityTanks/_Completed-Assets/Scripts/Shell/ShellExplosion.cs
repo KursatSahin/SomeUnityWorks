@@ -28,9 +28,7 @@ namespace Complete
 
         private void OnTriggerEnter (Collider other)
         {
-            Debug.Log("OKKKKK");
-            
-			// Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
+            /*// Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
             Collider[] colliders = Physics.OverlapSphere (transform.position, m_ExplosionRadius, m_TankMask);
 
             // Go through all the colliders...
@@ -52,12 +50,11 @@ namespace Complete
                 // If there is no TankHealth script attached to the gameobject, go on to the next collider.
                 if (!targetHealth)
                     continue;
+            }*/
 
-                // Calculate the amount of damage the target should take based on it's distance from the shell.
-                float damage = CalculateDamage (targetRigidbody.position);
-
-                // Deal this damage to the tank.
-                targetHealth.TakeDamage (damage);
+            if (other.tag.Equals(gameObject.tag))
+            {
+                return;
             }
 
             // Unparent the particles from the shell.
@@ -85,26 +82,6 @@ namespace Complete
             m_ExplosionParticles.gameObject.SetActive(false);
             m_ExplosionParticles.transform.parent = gameObject.transform;
             m_ExplosionParticles.transform.position = gameObject.transform.position;
-        }
-
-        private float CalculateDamage (Vector3 targetPosition)
-        {
-            // Create a vector from the shell to the target.
-            Vector3 explosionToTarget = targetPosition - transform.position;
-
-            // Calculate the distance from the shell to the target.
-            float explosionDistance = explosionToTarget.magnitude;
-
-            // Calculate the proportion of the maximum distance (the explosionRadius) the target is away.
-            float relativeDistance = (m_ExplosionRadius - explosionDistance) / m_ExplosionRadius;
-
-            // Calculate damage as this proportion of the maximum possible damage.
-            float damage = relativeDistance * m_MaxDamage;
-
-            // Make sure that the minimum damage is always 0.
-            damage = Mathf.Max (0f, damage);
-
-            return damage;
         }
     }
 }

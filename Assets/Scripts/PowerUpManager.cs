@@ -39,6 +39,7 @@ public class PowerUpManager : MonoBehaviour
     {
         var powerUp = (PowerUp) data;
         _powerUpsInUse.Add(powerUp);
+        //powerUp.ActivatePowerUp();
 
         EventManager.GetInstance().Notify(Events.PowerUpInUseUpdated, _powerUpsInUse);
         

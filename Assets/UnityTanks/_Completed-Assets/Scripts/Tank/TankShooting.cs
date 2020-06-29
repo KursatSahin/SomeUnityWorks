@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Complete
@@ -6,41 +9,103 @@ namespace Complete
     public class TankShooting : MonoBehaviour
     {
         public Transform m_FireTransform;           // A child of the tank where the shells are spawned.
+        public Transform m_LeftFireTransform;           // A child of the tank where the shells are spawned.
+        public Transform m_RightFireTransform;           // A child of the tank where the shells are spawned.
         public AudioSource m_ShootingAudio;         // Reference to the audio source used to play the shooting audio. NB: different to the movement audio source.
         public AudioClip m_FireClip;              // Audio that plays when each shot is fired.
         public float bulletSpeed = 15f;        // The force given to the shell if the fire button is not held.
         public float firingRate = 2f;       // How long the shell can charge for before it is fired at max force.
-        private bool firingStatus = false;
+        public bool doubleFireIsActivated = true;
+        private Coroutine _fireCoroutine = null;
 
-        private string fireActivateButton;                // The input axis that is used for launching shells.
-        private const string ShellPrefabTag = "ShellPrefabTag";
-        private void Start ()
+        private List<PowerUp> _ownedPowerUps;
+        
+        private string fireActivateButton = "Jump";        // The input axis that is used for launching shells.
+        private void Awake ()
         {
-            // The fire axis is based on the player number.
-            fireActivateButton = "Jump";
+            EventManager.GetInstance().AddHandler(Events.PowerUpInUseUpdated, OnPowerUpInUseUpdated);
         }
 
-
-        private void Update ()
+        private void Start()
         {
-            if (Input.GetButtonDown (fireActivateButton))
+            ActivateFire();
+        }
+
+        private void OnPowerUpInUseUpdated(object data)
+        {
+            // Get updated list
+            _ownedPowerUps = data as List<PowerUp>;
+            
+            // First stop fire for prevent causing sync problems
+            DeactivateFire();
+            
+            // For same reason stop all powerups too
+            foreach (var powerUp in _ownedPowerUps)
             {
-                firingStatus = !firingStatus;
-                
-                if (firingStatus)
+                if (powerUp.type == PowerUpType.CloneTank)
                 {
-                    InvokeRepeating("Fire",.5f, firingRate);    
+                    continue;
                 }
-                else
+
+                if (powerUp.isActivated)
                 {
-                    CancelInvoke("Fire");
+                    powerUp.DeactivatePowerUp();
                 }
             }
+            
+            // Then reactivate fire method and powerups
+            foreach (var powerUp in _ownedPowerUps)
+            {
+                if (powerUp.type == PowerUpType.CloneTank)
+                {
+                    continue;
+                }
+
+                powerUp.ActivatePowerUp();
+            }
+            
+            ActivateFire();
+        }
+
+        private void ActivateFire()
+        {
+            
+            if (_fireCoroutine != null)
+            {
+                StopCoroutine(_fireCoroutine);
+                _fireCoroutine = null;
+            }
+            
+            _fireCoroutine = StartCoroutine(InfiniteFire());
         }
         
+        private void DeactivateFire()
+        {
+            if (_fireCoroutine != null)
+            {
+                StopCoroutine(_fireCoroutine);
+            }
+        }
+
+        public IEnumerator InfiniteFire()
+        {
+            while (true)
+            {
+                Fire();
+                
+                if (doubleFireIsActivated)
+                {
+                    yield return new WaitForSeconds(.1f);
+                    Fire();
+                }
+                
+                yield return new WaitForSeconds(firingRate);
+            }
+        }
+
         private void Fire ()
         {
-            var shell = ObjectPooler.SharedInstance.GetPooledObject(ShellPrefabTag);
+            var shell = ObjectPooler.SharedInstance.GetPooledObject(ObjectPooler.PoolingObjectTags.ShellPrefabTag);
             shell.transform.position = m_FireTransform.position;
             shell.transform.rotation = m_FireTransform.rotation;
 
