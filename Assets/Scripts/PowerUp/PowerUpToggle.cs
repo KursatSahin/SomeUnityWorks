@@ -23,7 +23,7 @@ namespace PowerUp
         [SerializeField] private TextMeshProUGUI powerupLabelText;
         [SerializeField] private PowerUp powerUp;
     
-        #endregion Private Variables - Show In Inspector
+        #endregion PowerUp Toggle UI Variables - Show In Inspector
 
         #region Unity Events
 

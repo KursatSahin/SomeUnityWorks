@@ -12,6 +12,9 @@
         
         // MAIN MENU
         public const string StartGame = "START_GAME";
+        
+        // INGAME MENU
+        public const string RestartGame = "RESTART_GAME";
 
         #endregion Custom Events
     }
