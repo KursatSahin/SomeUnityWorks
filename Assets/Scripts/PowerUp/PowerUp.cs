@@ -36,7 +36,6 @@ namespace PowerUp
                 Debug.LogWarning($"{nameof(Equals)} from {nameof(PowerUp)} is called. Object type is mismatched!");
                 return false;
             }
-            return base.Equals(obj);
         }
 
         public void ActivatePowerUp()

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace Common
 {
     public class MapGenerator : MonoBehaviour
     {
-
+        [Header("This script didnt use to be simplify the map.")]
         [SerializeField] private GameObject floorPrefab;
 
         public int mapSize;
@@ -28,9 +29,8 @@ namespace Common
 
             List<List<GameObject>> mapMatrix = new List<List<GameObject>>();
 
-            var upperLeftCornerPos = new Vector3((-2*(mapSize/2))-1,(-2*(mapSize/2))-1,0);
-            // (Random.Range(0f, 10f)>2f)?0:1);
-        
+            var upperLeftCornerPos = new Vector3((-2*(mapSize/2))-3,0,(-2*(mapSize/2))-3);
+
             for (int i = 0; i < mapSize; i++)
             {
                 var floorLine = new List<GameObject>();
@@ -38,7 +38,7 @@ namespace Common
                 {
                     var floor = ObjectPooler.SharedInstance.GetPooledObject(ObjectPooler.PoolingObjectTags.FloorCubeTag);
                     floor.SetActive(true);
-                    floor.transform.position = upperLeftCornerPos + new Vector3(i*2,j*2,0);
+                    floor.transform.position = upperLeftCornerPos + new Vector3(i*2,0,j*2);
                     floorLine.Add(floor);
                 }
                 mapMatrix.Add(floorLine);

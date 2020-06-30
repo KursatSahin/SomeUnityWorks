@@ -22,63 +22,18 @@ namespace Complete
 
         private List<PowerUp.PowerUp> _ownedPowerUps;
         
-        private string fireActivateButton = "Jump";        // The input axis that is used for launching shells.
-        private void Awake ()
+        private void OnEnable ()
         {
+            EventManager.GetInstance().AddHandler(Events.StartGame, OnStartGame);
         }
 
-        private void Start()
+        private void OnDisable()
         {
-            //gameObject.SetActive(true);
+            EventManager.GetInstance().RemoveHandler(Events.StartGame, OnStartGame);
         }
-
-        private void OnEnable()
-        {
-            //ActivateFire();
-        }
-
-        /*private void OnPowerUpInUseUpdated(object data)
-        {
-            if (!isActiveAndEnabled)
-            {
-                return;
-            }
-            
-            // Get updated list
-            _ownedPowerUps = data as List<PowerUp.PowerUp>;
-            
-            // First stop fire for prevent causing sync problems
-            DeactivateFire();
-            
-            // For same reason stop all powerups too
-            foreach (var powerUp in _ownedPowerUps)
-            {
-                if (powerUp.type == PowerUpType.CloneTank)
-                {
-                    continue;
-                }
-
-                if (powerUp.isActivated)
-                {
-                    powerUp.DeactivatePowerUp();
-                }
-            }
-            
-            // Then reactivate fire method and powerups
-            foreach (var powerUp in _ownedPowerUps)
-            {
-                if (!powerUp.isActivated)
-                {
-                    powerUp.ActivatePowerUp();
-                }
-            }
-            
-            ActivateFire();
-        }*/
 
         public void ActivateFire()
         {
-            
             if (_fireCoroutine != null)
             {
                 StopCoroutine(_fireCoroutine);
@@ -96,8 +51,15 @@ namespace Complete
             }
         }
 
-        public IEnumerator InfiniteFire()
+        private void OnStartGame(object _)
         {
+            _fireCoroutine = StartCoroutine(InfiniteFire(1));
+        }
+
+        public IEnumerator InfiniteFire(float initialDelay = 0)
+        {
+            yield return new WaitForSeconds(initialDelay);
+            
             while (true)
             {
                 Fire();

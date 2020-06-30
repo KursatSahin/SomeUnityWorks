@@ -5,13 +5,15 @@ using UnityEngine;
 
 namespace PowerUp
 {
-    public class PowerUpManager : MonoBehaviour
+    public class PowerUpPanelManager : MonoBehaviour
     {
         #region Private Variables
 
         private List<PowerUp> _powerUpsInUse = new List<PowerUp>();
 
         #endregion Private Variables
+
+        [SerializeField] private GameObject powerUpPanel;
 
         private void Awake()
         {
@@ -55,13 +57,13 @@ namespace PowerUp
         private void AddHandlers()
         {
             EventManager.GetInstance().AddHandler(Events.PowerUpIsActivated, OnPowerUpIsActivated);
-            EventManager.GetInstance().AddHandler(Events.PowerUpIsDeactivated, OnPowerUpIsDeactivated);
+            //EventManager.GetInstance().AddHandler(Events.PowerUpIsDeactivated, OnPowerUpIsDeactivated);
         }
 
         private void RemoveHandlers()
         {
             EventManager.GetInstance().RemoveHandler(Events.PowerUpIsActivated, OnPowerUpIsActivated);
-            EventManager.GetInstance().RemoveHandler(Events.PowerUpIsDeactivated, OnPowerUpIsDeactivated);
+            //EventManager.GetInstance().RemoveHandler(Events.PowerUpIsDeactivated, OnPowerUpIsDeactivated);
         }
     }
 }
