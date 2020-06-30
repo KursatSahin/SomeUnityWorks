@@ -7,7 +7,7 @@ namespace PowerUps
     {
         private TankShooting _tankShooting;
 
-        private void Start()
+        public override void Init()
         {
             _tankShooting = tank.GetComponent<TankShooting>();
         }

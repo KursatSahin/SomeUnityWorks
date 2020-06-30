@@ -6,6 +6,10 @@ namespace PowerUp
     {
         public GameObject tank;
 
+        public virtual void Init()
+        {
+        }
+
         public virtual void Activate()
         {
         }
