@@ -25,8 +25,6 @@ namespace Complete
         private string fireActivateButton = "Jump";        // The input axis that is used for launching shells.
         private void Awake ()
         {
-            EventManager.GetInstance().AddHandler(Events.PowerUpInUseUpdated, OnPowerUpInUseUpdated);
-            //gameObject.SetActive(false);
         }
 
         private void Start()
@@ -39,7 +37,7 @@ namespace Complete
             //ActivateFire();
         }
 
-        private void OnPowerUpInUseUpdated(object data)
+        /*private void OnPowerUpInUseUpdated(object data)
         {
             if (!isActiveAndEnabled)
             {
@@ -76,9 +74,9 @@ namespace Complete
             }
             
             ActivateFire();
-        }
+        }*/
 
-        private void ActivateFire()
+        public void ActivateFire()
         {
             
             if (_fireCoroutine != null)
@@ -90,7 +88,7 @@ namespace Complete
             _fireCoroutine = StartCoroutine(InfiniteFire());
         }
         
-        private void DeactivateFire()
+        public void DeactivateFire()
         {
             if (_fireCoroutine != null)
             {
