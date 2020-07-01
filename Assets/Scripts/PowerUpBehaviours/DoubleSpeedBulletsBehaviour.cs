@@ -23,7 +23,11 @@ namespace PowerUpBehaviours
         public override void Activate()
         {
             // Set the bullet speed to 2 times the default value
+<<<<<<< HEAD
             _tankShooting.bulletSpeed *= 1.5f;
+=======
+            _tankShooting.bulletSpeed = 30f;
+>>>>>>> 8513d5a9d2150f60a5fc4459c0975f95b7cf6ee5
         }
 
         /// <summary>
@@ -32,7 +36,11 @@ namespace PowerUpBehaviours
         public override void Deactivate()
         {
             // Set the bullet speed to the default value
+<<<<<<< HEAD
             _tankShooting.bulletSpeed /= 1.5f;
+=======
+            _tankShooting.bulletSpeed = 15;
+>>>>>>> 8513d5a9d2150f60a5fc4459c0975f95b7cf6ee5
         }
     }
 }
