@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using Common;
 using Complete;
 using PowerUp;
-using PowerUps;
+using PowerUpBehaviours;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Tank
 {
     [RequireComponent(typeof(TankShooting))]
-    public class TankPowerUpManager : MonoBehaviour
+    public class TankPowerUpManager : MonoBehaviour, IEventManagerHandling
     {
+        #region Data Variables for TankPowerUpManager
+
         public Dictionary<PowerUp.PowerUp, PowerUpBehaviour> ownedPowerUps =
             new Dictionary<PowerUp.PowerUp, PowerUpBehaviour>();
+        
         private TankShooting _tankShooting;
+
+        #endregion Data Variables for TankPowerUpManager
+
+        #region Unity Events
 
         private void Awake()
         {
@@ -33,6 +40,11 @@ namespace Tank
             }
         }
 
+        #endregion Unity Events
+
+        #region Method Definitions
+
+        // This method is callback for PowerUpInUseUpdated event
         public void OnPowerUpInUseUpdated(object data)
         {
             if (!isActiveAndEnabled)
@@ -43,6 +55,12 @@ namespace Tank
             // Get updated list
             var updatedPowerupList = data as List<PowerUp.PowerUp>;
 
+            // Check list status
+            if (updatedPowerupList == null || updatedPowerupList.Count < 1)
+            {
+                return;
+            }
+            
             // Add new Power ups to ownedPowerUps List
             foreach (var listItem in updatedPowerupList)
             {
@@ -86,6 +104,12 @@ namespace Tank
             }
         }
         
+        /// <summary>
+        /// This method adds power up behaviour component to tank due to powerup type
+        /// then return added component
+        /// </summary>
+        /// <param name="type">PowerUpType parameter</param>
+        /// <returns>Added PowerUpBehaaviour component</returns>
         private PowerUpBehaviour AddPowerUpBehaviourComponent(PowerUpType type)
         {
             PowerUpBehaviour tempBehaviour;
@@ -116,6 +140,18 @@ namespace Tank
             tempBehaviour.Init();
 
             return tempBehaviour;
+        }
+
+        #endregion Method Definitions
+
+        public void AddHandlers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveHandlers()
+        {
+            throw new NotImplementedException();
         }
     }
 }

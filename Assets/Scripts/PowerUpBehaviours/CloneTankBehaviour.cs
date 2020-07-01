@@ -1,50 +1,61 @@
 using System.Linq;
 using Common;
-using Complete;
 using PowerUp;
 using Tank;
 using UnityEngine;
 
-namespace PowerUps
+namespace PowerUpBehaviours
 {
     public class CloneTankBehaviour : PowerUpBehaviour
     {
-        private GameObject clone;
+        private GameObject _clonedTank;
         
+        /// <summary>
+        /// This method user for activate PowerUp
+        /// </summary>
         public override void Activate()
         {
             CloneTank();
         }
 
+        /// <summary>
+        /// This method user for deactivate PowerUp
+        /// </summary>
         public override void Deactivate()
         {
-            clone.SetActive(false);
+            _clonedTank.SetActive(false);
         }
 
+        /// <summary>
+        /// This method duplicate our Tank with all attributes.
+        /// </summary>
         private void CloneTank()
         {
-            clone = ObjectPooler.SharedInstance.GetPooledObject(ObjectPooler.PoolingObjectTags.CompleteTankPrefabTag);
-            var clonedTankMovement = clone.GetComponent<TankMovement>();
-            var clonedTankShooting = clone.GetComponent<TankShooting>();
-            var clonedTankPowerUpManager = clone.GetComponent<TankPowerUpManager>();
+            // Get instantiated tank from ObjectPooler
+            _clonedTank = ObjectPooler.SharedInstance.GetPooledObject(PoolingObjectTags.CompleteTankPrefabTag);
             
-            clonedTankMovement = tank.GetComponent<TankMovement>();
-            clonedTankShooting = tank.GetComponent<TankShooting>();
+            // Get necessary custom components of original tank
+            var clonedTankPowerUpManager = _clonedTank.GetComponent<TankPowerUpManager>();
 
-            clone.transform.parent = tank.transform.parent;
-            clone.transform.position = tank.transform.position + new Vector3(0, 3, 0);
+            // Set necessary transform datas to clonedTank from original tank  
+            _clonedTank.transform.parent = tank.transform.parent;
+            _clonedTank.transform.position = tank.transform.position + new Vector3(3, 0, 0);
 
-            clone.SetActive(true);
+            // clonedTank is activated after all assignments are completed
+            _clonedTank.SetActive(true);
 
+            // Get all power ups from original tank as a list  
             var originalPowerUps = tank.GetComponent<TankPowerUpManager>().ownedPowerUps.Keys.ToList();
 
+            // Remove "CloneTank" powerup if the list contains to prevent generating infinite clones 
             var clonePowerUp = originalPowerUps.Find(item => item.type == PowerUpType.CloneTank);
-
+            
             if (clonePowerUp != null)
             {
                 originalPowerUps.Remove(clonePowerUp);
             }
 
+            // Set powerup list to cloned tank
             clonedTankPowerUpManager.OnPowerUpInUseUpdated(originalPowerUps);
         }
     }

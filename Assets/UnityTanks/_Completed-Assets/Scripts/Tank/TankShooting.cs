@@ -76,7 +76,7 @@ namespace Complete
 
         private void Fire ()
         {
-            var shell = ObjectPooler.SharedInstance.GetPooledObject(ObjectPooler.PoolingObjectTags.ShellPrefabTag);
+            var shell = ObjectPooler.SharedInstance.GetPooledObject(PoolingObjectTags.ShellPrefabTag);
             shell.transform.position = m_FireTransform.position;
             shell.transform.rotation = m_FireTransform.rotation;
 

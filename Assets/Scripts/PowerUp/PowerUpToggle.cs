@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace PowerUp
 {
     [RequireComponent(typeof(Toggle))]
-    public class PowerUpToggle : MonoBehaviour
+    public class PowerUpToggle : MonoBehaviour, IEventManagerHandling
     {
         #region Private Variables
     
@@ -30,17 +30,17 @@ namespace PowerUp
         private void Awake()
         {
             InitToggle();
-            AddHandler();
+            AddHandlers();
         }
     
         private void OnDestroy()
         {
-            RemoveHandler();
+            RemoveHandlers();
         }
 
         #endregion
 
-        #region PowerUp Toggle Functions
+        #region PowerUp Toggle Methods Definitions
 
         /// <summary>
         /// This is a initializer method for toggle
@@ -111,16 +111,22 @@ namespace PowerUp
             DisableToggle();
         }
     
-        private void AddHandler()
+        /// <summary>
+        /// This method adds all the necessary handlers to the EventManager at the same time if possible.
+        /// </summary>
+        public void AddHandlers()
         {
             EventManager.GetInstance().AddHandler(Events.PowerUpLimitHasReached, OnPowerUpLimitHasReached);
         }
 
-        private void RemoveHandler()
+        /// <summary>
+        /// This method removes all handlers added by itself from EventManager at the same time if possible. 
+        /// </summary>
+        public void RemoveHandlers()
         {
             EventManager.GetInstance().RemoveHandler(Events.PowerUpLimitHasReached, OnPowerUpLimitHasReached);
         }
     
-        #endregion PowerUp Toggle Functions
+        #endregion PowerUp Toggle Methods Definitions
     }
 }

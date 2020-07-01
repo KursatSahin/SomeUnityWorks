@@ -1,5 +1,8 @@
 ﻿namespace Common
 {
+    /// <summary>
+    /// Events class contains all constant variables to be used by our custom event handler class
+    /// </summary>
     public static class Events
     {
         #region Custom Events
@@ -17,5 +20,7 @@
         public const string RestartGame = "RESTART_GAME";
 
         #endregion Custom Events
+        
+        // TODO : API, WEBSOCKET, ETC.. EVENTS 
     }
 }

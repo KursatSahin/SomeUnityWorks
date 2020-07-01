@@ -8,14 +8,16 @@ namespace Common
     public class EventManager
     {
         private static EventManager _instance;
+        
         private readonly Dictionary<string, List<Handler>> _handlers = new Dictionary<string, List<Handler>>();
-
+        
         private readonly Dictionary<string, Func<object, object>> _requestHandler = new Dictionary<string, Func<object, object>>();
 
         private readonly object _locker = new object();
         
         private EventManager()
         {
+            
         }
 
         public static EventManager GetInstance()
@@ -40,11 +42,6 @@ namespace Common
             }
         }
 
-        public void AddRequestHandler(string eventName, Func<object, object> callback) {
-            RemoveRequestHandler(eventName);
-            _requestHandler.Add(eventName, callback);
-        }
-
         public void RemoveHandler(string eventName, Action<object> callback)
         {
             lock (_locker)
@@ -58,11 +55,6 @@ namespace Common
                     }
                 }
             }
-        }
-
-        public void RemoveRequestHandler(string eventName) {
-            if (_requestHandler.ContainsKey(eventName))
-                _requestHandler.Remove(eventName);
         }
 
         private void RemoveHandlerIfAutoDestroyEnabled(string eventName, List<Handler> handlers)
@@ -98,15 +90,6 @@ namespace Common
             }
             
             RemoveHandlerIfAutoDestroyEnabled(eventName, notifiedHandlers);
-        }
-
-        public void Request(string eventName, object parameters, Action<object> responseHandler) {
-            if (_requestHandler.ContainsKey(eventName))
-                return;
-            
-            var handler = _requestHandler[eventName];
-            object response = handler.Invoke(parameters);
-            responseHandler(response);
         }
 
         public void Destroy()
