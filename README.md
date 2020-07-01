@@ -1,2 +1,2 @@
 # SomeUnityWorks
-This repo contains some examples and demos made with unity.
+This repo contains some powerup example based on Unity Tanks project.
