@@ -18,7 +18,11 @@ namespace UI
 
         #endregion
 
+        #region Data Variables for MainMenuManager
+
         private Coroutine _spinCoroutine;
+
+        #endregion Data Variables for MainMenuManager
 
         #region Unity Events
 
@@ -43,6 +47,9 @@ namespace UI
 
         #region Method Definitions
 
+        /// <summary>
+        /// This method is callback for StartButton onclick listener.
+        /// </summary>
         private void StartDemo()
         {
             // Disable main menu canvas
@@ -67,6 +74,9 @@ namespace UI
             EventManager.GetInstance().Notify(Events.StartGame);
         }
         
+        /// <summary>
+        /// This method is callback for QuitButton onclick listener.
+        /// </summary>
         private void QuitDemo()
         {
             #if UNITY_EDITOR
@@ -76,6 +86,9 @@ namespace UI
             #endif
         }
 
+        /// <summary>
+        /// This method is use to spinning GameWorld until game has started 
+        /// </summary>
         IEnumerator Spin(){
             while(true){
                 float timer = 0f;
@@ -85,16 +98,6 @@ namespace UI
                     yield return null;
                 }
             }
-        }
-
-        private void AddHandlers()
-        {
-            
-        }
-
-        private void RemoveHandlers()
-        {
-            
         }
 
         #endregion Method Definitions
